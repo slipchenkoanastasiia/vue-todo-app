@@ -19,7 +19,6 @@
         tag="ul"
       >
         <template #item="{ element: task }">
-          <!-- Відображаємо лише задачі, які проходять фільтр -->
           <TaskItem
             v-if="passesFilter(task)"
             :task="task"
@@ -56,7 +55,6 @@ const tasks = ref<Task[]>(JSON.parse(localStorage.getItem('tasks') || '[]') || [
 
 const filter = ref('all')
 
-// Збереження в localStorage при зміні tasks
 watch(tasks, (val) => {
   localStorage.setItem('tasks', JSON.stringify(val))
 }, { deep: true })
@@ -80,13 +78,10 @@ const removeTask = (id: number) => {
   tasks.value = tasks.value.filter(t => t.id !== id)
 }
 
-// Сортування після drag & drop
 const onDragEnd = () => {
-  // tasks вже оновлені автоматично через v-model
-  // localStorage збереження вже відбувається через watch
+
 }
 
-// Функція перевірки, чи проходить задача через фільтр
 const passesFilter = (task: Task) => {
   if (filter.value === 'completed') return task.completed
   if (filter.value === 'active') return !task.completed
@@ -95,14 +90,13 @@ const passesFilter = (task: Task) => {
 
 const completedCount = computed(() => tasks.value.filter(t => t.completed).length)
 
-// --- Тема ---
 const theme = ref(localStorage.getItem('theme') || 'light')
 const toggleTheme = () => {
   theme.value = theme.value === 'dark' ? 'light' : 'dark'
   localStorage.setItem('theme', theme.value)
   document.documentElement.classList.toggle('dark', theme.value === 'dark')
 }
-// При ініціалізації
+
 document.documentElement.classList.toggle('dark', theme.value === 'dark')
 
 </script>
